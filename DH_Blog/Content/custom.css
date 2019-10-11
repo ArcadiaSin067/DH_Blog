@@ -1,0 +1,8 @@
+﻿
+#CreatePost {
+    border-color:darkslateblue;
+}
+#CreatePost:hover {
+    color: #fff;
+    background-color: darkslateblue;
+}
