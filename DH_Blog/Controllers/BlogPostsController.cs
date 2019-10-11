@@ -14,12 +14,14 @@ namespace DH_Blog.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
+        [Authorize(Roles = "Admin, Moderator")]
         public ActionResult Index()
         {
             var myblogposts = db.BlogPosts.ToList();
             return View(myblogposts);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult UnPubIndex()
         {
             var pubPosts = db.BlogPosts.Where(b => !b.Published).ToList();
@@ -79,13 +81,14 @@ namespace DH_Blog.Controllers
         }
 
         //GET: BlogPosts/Edit/5
-        public ActionResult Edit(int? id)
+        [Authorize(Roles = "Admin, Moderator")]
+        public ActionResult Edit(string Slug)
         {
-            if (id == null)
+            if (String.IsNullOrWhiteSpace(Slug))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            BlogPost blogPost = db.BlogPosts.Find(id);
+            BlogPost blogPost = db.BlogPosts.FirstOrDefault(p => p.Slug == Slug);
             if (blogPost == null)
             {
                 return HttpNotFound();
@@ -98,7 +101,7 @@ namespace DH_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id, Title, Abstract, BlogPostBody,Published,Created")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id, Title, Abstract, BlogPostBody,Published,Created,Slug")] BlogPost blogPost)
         {
             if (ModelState.IsValid)
             {
@@ -111,6 +114,7 @@ namespace DH_Blog.Controllers
         }
 
         // GET: BlogPosts/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)

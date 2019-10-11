@@ -12,9 +12,16 @@ namespace DH_Blog
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+            routes.MapRoute(
+                name: "EditSlug",
+                url: "Blog/Data/{slug}",
+                defaults: new {
+                    controller = "BlogPosts", action = "Edit",
+                    slug = UrlParameter.Optional
+                });
 
             routes.MapRoute(
-                name: "NewSlug",
+                name: "DetailSlug",
                 url: "Blog/Data/{slug}",
                 defaults: new {
                     controller = "BlogPosts", action = "Details",

@@ -16,6 +16,17 @@
     </div>
     <hr>
 
+    @section scripts
+    {
+    @*script to change the masthead stuff*@
+    <script>
+        $(document).ready(function () {
+            // Set background image of a div on load
+            var imageUrl = "/IMGs/about-bg.jpg";
+            $(".masthead").css("background-image", "url(" + imageUrl + ")");
+        });
+    </script>
+    }
 
 </body>
 
