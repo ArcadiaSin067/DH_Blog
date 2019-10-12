@@ -1,8 +1,14 @@
 ﻿
-#CreatePost {
-    border-color:darkslateblue;
+.allButtons {
+    color: #515151;
+    border-color: #adadad;
+    background-color: #fff;
+    border-radius:3px;
 }
-#CreatePost:hover {
+.allButtons:hover {
     color: #fff;
+    border-color:#fff;
     background-color: darkslateblue;
+    border-radius:3px;
+
 }

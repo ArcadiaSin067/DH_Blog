@@ -19,21 +19,21 @@
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
     <!-- Custom styles for this template -->
-    <link href="~/Content/custom.css" rel="stylesheet" />
     <link href="~/Content/clean-blog.min.css" rel="stylesheet" />
+    <link href="~/Content/custom.css" rel="stylesheet" />
 
 </head>
 
 <body>
     <!-- Page Header -->
-    <header class="masthead" id="mastPic" style="max-height:200px; background-image: url('/IMGs/home-bg.jpg')">
+    <header class="masthead" style="max-height:200px; background-image: url('/IMGs/home-bg.jpg')">
         <div class="overlay" style="max-height:200px"></div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <div class="site-heading">
-                        <h1>Clean Blog</h1>
-                        <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        <h1 id="topText">Clean Blog</h1>
+                        <span id="subText" class="subheading">Theme by Start Bootstrap, modified by Daniel Hebbard</span>
                     </div>
                 </div>
             </div>
@@ -52,12 +52,16 @@
                 <ul class="navbar-nav ml-auto">
                     @if (User.IsInRole("Admin"))
                     {
-                    <li class="nav-item">
-                        @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
-                    </li>
-                    <li class="nav-item">
-                        @Html.ActionLink("Unpublished Posts", "UnPubIndex", "BlogPosts", null, new { @class = "nav-link" })
-                    </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Create Post", "Create", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Unpublished Posts", "UnPubIndex", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("A Certain Index", "Index", "BlogPosts", null, new { @class = "nav-link" })
+                        </li>
+
                     }
                     <li class="nav-item">
                         @Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })
@@ -68,7 +72,18 @@
                     <li class="nav-item">
                         @Html.ActionLink("Contact", "Contact", "Home", null, new { @class = "nav-link" })
                     </li>
-
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Sign Out", "Login", "Account", null, new { @class = "nav-link" })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            @Html.ActionLink("Sign In", "Login", "Account", null, new { @class = "nav-link" })
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
