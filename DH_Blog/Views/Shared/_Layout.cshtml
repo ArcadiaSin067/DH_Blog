@@ -32,8 +32,8 @@
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <div class="site-heading">
-                        <h1 id="topText">Clean Blog</h1>
-                        <span id="subText" class="subheading">Theme by Start Bootstrap, modified by Daniel Hebbard</span>
+                        <h1 id="topText">My Developer Blog</h1>
+                        <span id="subText" class="subheading">Inside the mind of Daniel Hebbard</span>
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
         <div class="container">
-            <a href="https://dhportfolio.azurewebsites.net" class="navbar-brand">Daniel Hebbard</a>
+            <a href="https://dhportfolio.azurewebsites.net" class="navbar-brand">Portfolio</a>
             <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                 Menu
                 <i class="fas fa-bars"></i>
@@ -75,7 +75,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item">
-                            @Html.ActionLink("Sign Out", "Login", "Account", null, new { @class = "nav-link" })
+                            @Html.ActionLink("Sign Out", "LogOff", "Account", null, new { @class = "nav-link" })
                         </li>
                     }
                     else
