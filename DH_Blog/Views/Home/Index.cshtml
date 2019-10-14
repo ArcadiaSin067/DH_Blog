@@ -5,7 +5,7 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            @foreach (var blogPost in Model)
+            @foreach (var blogPost in Model.OrderByDescending(b => b.Created))
             {
                 <div class="post-preview">
                     <a href=@Url.Action("Details","BlogPosts",new {slug = blogPost.Slug})>

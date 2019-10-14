@@ -204,7 +204,9 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="IMGs\about-bg.jpg" />
+    <Content Include="IMGs\blank-user.png" />
     <Content Include="IMGs\contact-bg.jpg" />
+    <Content Include="IMGs\favicon.png" />
     <Content Include="IMGs\home-bg.jpg" />
     <Content Include="IMGs\post-bg.jpg" />
     <Content Include="IMGs\post-sample-image.jpg" />

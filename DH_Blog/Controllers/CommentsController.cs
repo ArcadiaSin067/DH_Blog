@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using DH_Blog.Models;
+using Microsoft.AspNet.Identity;
 
 namespace DH_Blog.Controllers
 {
@@ -36,30 +37,23 @@ namespace DH_Blog.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
-        public ActionResult Create()
-        {
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName");
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title");
-            return View();
-        }
-
         // POST: Comments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,BlogPostId,AuthorId,Created,CommentBody,Updated,UpdateReason")] Comment comment)
+        public ActionResult Create([Bind(Include = "BlogPostId,CommentBody")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.Created = DateTime.Now;
+                comment.AuthorId = User.Identity.GetUserId();
                 db.Comments.Add(comment);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                // send user back to blogpost
+                var slug = db.BlogPosts.Find(comment.BlogPostId).Slug;
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
-
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "FirstName", comment.AuthorId);
-            ViewBag.BlogPostId = new SelectList(db.BlogPosts, "Id", "Title", comment.BlogPostId);
             return View(comment);
         }
 
