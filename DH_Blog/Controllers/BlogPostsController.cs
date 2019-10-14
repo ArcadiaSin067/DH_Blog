@@ -105,6 +105,21 @@ namespace DH_Blog.Controllers
         {
             if (ModelState.IsValid)
             {
+                var newSlug = StringUtilities.URLFriendly(blogPost.Title);
+                if(newSlug != blogPost.Slug)
+                {
+                    if (string.IsNullOrWhiteSpace(newSlug))
+                    {
+                        ModelState.AddModelError("Title", "Invalid title");
+                        return View(blogPost);
+                    }
+                    if (db.BlogPosts.Any(p => p.Slug == newSlug))
+                    {
+                        ModelState.AddModelError("Title", "The title must be unique");
+                        return View(blogPost);
+                    }
+                    blogPost.Slug = newSlug;
+                }
                 blogPost.Updated = DateTime.Now;
                 db.Entry(blogPost).State = EntityState.Modified;
                 db.SaveChanges();
