@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Web;
 using System.Web.Mvc;
 using DH_Blog.Helpers;
 using DH_Blog.Models;
@@ -55,7 +57,7 @@ namespace DH_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Title,Abstract,BlogPostBody,Published")] BlogPost blogPost)
+        public ActionResult Create([Bind(Include = "Id,Title,Abstract,BlogPostBody,Published")] BlogPost blogPost, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
@@ -70,6 +72,13 @@ namespace DH_Blog.Controllers
                     ModelState.AddModelError("Title", "The title must be unique");
                     return View(blogPost);
                 }
+                if (ImageUploadValidator.IsWebFriendlyImage(Image))
+                {
+                    var fileName = Path.GetFileName(Image.FileName);
+                    Image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.ImagePath = "/Uploads/" + fileName;
+                }
+
                 blogPost.Slug = Slug;
                 blogPost.Created = DateTime.Now;
                 db.BlogPosts.Add(blogPost);
@@ -101,7 +110,7 @@ namespace DH_Blog.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id, Title, Abstract, BlogPostBody,Published,Created,Slug")] BlogPost blogPost)
+        public ActionResult Edit([Bind(Include = "Id, Title, Abstract, BlogPostBody,Published,Created,Slug, ImagePath")] BlogPost blogPost, HttpPostedFileBase Image)
         {
             if (ModelState.IsValid)
             {
@@ -120,6 +129,13 @@ namespace DH_Blog.Controllers
                     }
                     blogPost.Slug = newSlug;
                 }
+                if (ImageUploadValidator.IsWebFriendlyImage(Image))
+                {
+                    var fileName = Path.GetFileName(Image.FileName);
+                    Image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
+                    blogPost.ImagePath = "/Uploads/" + fileName;
+                }
+
                 blogPost.Updated = DateTime.Now;
                 db.Entry(blogPost).State = EntityState.Modified;
                 db.SaveChanges();

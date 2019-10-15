@@ -14,7 +14,9 @@
 
 @if (User.Identity.IsAuthenticated)
 {
+
     <div id="addComment">
+        <div class="col"><h4>Leave a Comment?</h4></div>
         @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
         {
             @Html.AntiForgeryToken();
@@ -34,27 +36,27 @@
 {
     @Html.AntiForgeryToken();
     @Html.ValidationSummary(true, "", new { @class = "text-danger" });
-<div class="container" mt-3>
-    @if (User.IsInRole("Admin, Moderator"))
-    {
-        @*@Html.ActionLink("Edit", "Comments", new { slug = Model.Slug })*@
-    }
-    <div class="media">
-        <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:50px;height:50px" />
-        <div class="media-body" style="border:1px solid cadetblue; padding:10px 20px 10px 20px">
-            <div class="row" style="max-height:15px">
-                <div class="col-md-9">
-                    <span style="font-size:16px">by @comment.Author.Email</span> 
+    <div class="container" mt-3>
+        @if (User.IsInRole("Admin, Moderator"))
+        {
+            @*@Html.ActionLink("Edit", "Comments", new { slug = Model.Slug })*@
+        }
+        <div class="media">
+            <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:50px;height:50px" />
+            <div class="media-body" style="border:1px solid cadetblue; padding:10px 20px 10px 20px">
+                <div class="row" style="max-height:15px">
+                    <div class="col-md-9">
+                        <span style="font-size:16px">by @comment.Author.Email</span>
+                    </div>
+                    <div class="col-md-3 d-flex justify-content-end" style="font-size:14px">
+                        @comment.Created.ToString("MMM dd, y | hh:mm:ss tt")
+                    </div>
                 </div>
-                <div class="col-md-3 d-flex justify-content-end" style="font-size:14px">
-                    @comment.Created.ToString("MMM dd, y | hh:mm:ss tt")
-                </div>
+                <hr />
+                @Html.Raw(comment.CommentBody)
             </div>
-            <hr />
-            @Html.Raw(comment.CommentBody)
         </div>
     </div>
-</div>
 }
 
 @section Scripts {
@@ -68,4 +70,16 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            // Set background image of a div on load
+            var imageUrl = '@Model.ImagePath', PstTitle = '@Model.Title', AbsTxt = '@Model.Abstract';
+            if (imageUrl != ''){
+                $(".masthead").css("background-image", "url(" + imageUrl + ")");
+            }
+            $('#topText').text(PstTitle);
+            $('#subText').text(AbsTxt);
+        });
+    </script>
+
 }

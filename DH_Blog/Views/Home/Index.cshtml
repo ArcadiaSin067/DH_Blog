@@ -7,22 +7,32 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             @foreach (var blogPost in Model.OrderByDescending(b => b.Created))
             {
-                <div class="post-preview">
-                    <a href=@Url.Action("Details","BlogPosts",new {slug = blogPost.Slug})>
-                        <h2 class="post-title">
-                            @blogPost.Title
-                        </h2>
-                        <h3 class="post-subtitle">
-                            @blogPost.Abstract
-                        </h3>
-                    </a>
-                    <p class="post-meta">
-                        Posted by
-                        @*<a href="">Daniel Hebbard</a>     //used for complex links with lots of embedded code or to external sites*@
-                        @Html.ActionLink("Daniel Hebbard", "About", "Home")    @*Otherwise use this for local pages*@
-                        on @blogPost.Created.ToString("MMM dd, yyyy")
-                    </p>
+            <div class="post-preview">
+                <div class="row">
+                    @if (blogPost.ImagePath != null)
+                    {
+                        <div class="col-2">
+                            <img style="width:115px; height:115px" src="@blogPost.ImagePath " alt="" />
+                        </div>
+                    }
+                    <div class="col">
+                        <a href=@Url.Action("Details","BlogPosts",new {slug = blogPost.Slug})>
+                            <h2 class="post-title">
+                                @blogPost.Title
+                            </h2>
+                            <h3 class="post-subtitle">
+                                @blogPost.Abstract
+                            </h3>
+                        </a>
+                    </div>
                 </div>
+                <p class="post-meta">
+                    Posted by
+                    @*<a href="">Daniel Hebbard</a>     //used for complex links with lots of embedded code or to external sites*@
+                    @Html.ActionLink("Daniel Hebbard", "About", "Home")    @*Otherwise use this for local pages*@
+                    on @blogPost.Created.ToString("MMM dd, yyyy")
+                </p>
+            </div>
                 <hr>
             }
 
