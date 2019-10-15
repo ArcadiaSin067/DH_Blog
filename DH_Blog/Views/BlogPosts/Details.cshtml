@@ -1,6 +1,5 @@
 ﻿@model DH_Blog.Models.BlogPost
 
-
 <!-- Post Content -->
 <article>
     <div class="container">
@@ -15,37 +14,47 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-<div id="addComment">
-    @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
-    {
-        @Html.AntiForgeryToken();
-        @Html.Hidden("BlogPostId", Model.Id);
+    <div id="addComment">
+        @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken();
+            @Html.Hidden("BlogPostId", Model.Id);
 
-    <div class="col-md-8">
-        @*@Html.Editor(model => model.c, new { htmlAttributes = new { @class = "form-control" } })
-        @Html.ValidationMessageFor(model => model.BlogPostBody, "", new { @class = "text-danger" })*@
-        @Html.TextArea("CommentBody", new { rows = 5, cols = 50, placeholder = "Add Comment" })
+            <div class="col-md-6">
+                @Html.Editor("CommentBody", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("CommentBody", "", new { @class = "text-danger" })
+                <button type="submit" class="btn allButtons">Add</button>
+            </div>
+        }
     </div>
-        <button type="submit" class="btn allButtons">Add</button>
-    }
-</div>
 }
 <hr style="border:2px solid black;" />
 
 @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
 {
-    <div class="container" mt-3>
-        <div class="media">
-            <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:75px;height:75px" />
-            <div class="media-body">
-                <div style="text-align:right">@comment.Created.ToString("MMM dd, y / hh:mm tt")</div>
-                <h5>by @comment.Author.Email</h5>
-                <br />
-                @comment.CommentBody
-                <hr />
+    @Html.AntiForgeryToken();
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" });
+<div class="container" mt-3>
+    @if (User.IsInRole("Admin, Moderator"))
+    {
+        @*@Html.ActionLink("Edit", "Comments", new { slug = Model.Slug })*@
+    }
+    <div class="media">
+        <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:50px;height:50px" />
+        <div class="media-body" style="border:1px solid cadetblue; padding:10px 20px 10px 20px">
+            <div class="row" style="max-height:15px">
+                <div class="col-md-9">
+                    <span style="font-size:16px">by @comment.Author.Email</span> 
+                </div>
+                <div class="col-md-3 d-flex justify-content-end" style="font-size:14px">
+                    @comment.Created.ToString("MMM dd, y | hh:mm:ss tt")
+                </div>
             </div>
+            <hr />
+            @Html.Raw(comment.CommentBody)
         </div>
     </div>
+</div>
 }
 
 @section Scripts {
@@ -53,10 +62,10 @@
     <script src="~/Scripts/tinymce/tinymce.min.js"></script>
     <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
     <script type="text/javascript">
-                $(function () {
-                    tinymce.init({
-                        selector: '#EditorFor'
-                    });
-                });
+        $(function () {
+            tinymce.init({
+                selector: '#CommentBody'
+            });
+        });
     </script>
 }

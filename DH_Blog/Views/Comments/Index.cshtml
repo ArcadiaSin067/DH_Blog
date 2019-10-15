@@ -46,7 +46,7 @@
                 @Html.DisplayFor(modelItem => item.Created)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CommentBody)
+                @Html.Raw(item.CommentBody)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Updated)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace DH_Blog.Models
 {
@@ -14,6 +15,7 @@ namespace DH_Blog.Models
         public DateTime Created { get; set; }
 
         [Display(Name="Comment")]
+        [AllowHtml]
         public string CommentBody { get; set; }
         public DateTime? Updated { get; set; }
         public string UpdateReason { get; set; }
