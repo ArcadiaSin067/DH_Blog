@@ -1,87 +1,98 @@
-﻿@using DH_Blog.Models
-@model IEnumerable<BlogPost>
+﻿@using DH_Blog.Models;
+@using PagedList;
+@using PagedList.Mvc;
 
-<!DOCTYPE html>
-<html lang="en">
+@model IPagedList<BlogPost>
 
-<body>
+<link href="~/Content/PagedList.css" rel="stylesheet" />
 
-    <div class="container">
-        <h2>Index</h2>
-        <h4>Blog Posts</h4>
-        <hr />
-        @if (User.IsInRole("Admin"))
+<div class="container">
+    <h2>Index</h2>
+    <h4>Blog Posts</h4>
+    <hr />
+    @if (User.IsInRole("Admin"))
+    {
+        <p>
+            @Html.ActionLink("Create New", "Create")
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Created")
+            </th>
+            <th>
+                @Html.DisplayName("Updated")
+            </th>
+            <th>
+                @Html.DisplayName("Title")
+            </th>
+            <th>
+                @Html.DisplayName("Slug")
+            </th>
+            <th>
+                @Html.DisplayName("Abstract")
+            </th>
+            <th>
+                @Html.DisplayName("BlogPostBody")
+            </th>
+            <th>
+                @Html.DisplayName("ImagePath")
+            </th>
+            <th>
+                @Html.DisplayName("Published")
+            </th>
+            <th></th>
+        </tr>
+        @*cycle through every blogpost record in the set of records showing property values for each, one at a time*@
+        @foreach (var item in Model)
         {
-            <p>
-                @Html.ActionLink("Create New", "Create")
-            </p>
-        }
-        <table class="table">
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Created)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Updated)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Slug)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Abstract)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.BlogPostBody)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.ImagePath)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Published)
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Created)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Updated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slug)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Abstract)
+                </td>
+                <td>
+                    @Html.Raw(item.BlogPostBody)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImagePath)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Published)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { slug = item.Slug })
+                    @Html.ActionLink("Details", "Details", new { slug = item.Slug })
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
             </tr>
-            @*cycle through every blogpost record in the set of records showing property values for each, one at a time*@
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Created)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Updated)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Title)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Slug)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Abstract)
-                    </td>
-                    <td>
-                        @Html.Raw(item.BlogPostBody)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.ImagePath)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Published)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { slug = item.Slug })
-                        @Html.ActionLink("Details", "Details", new { slug = item.Slug })
-                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                    </td>
-                </tr>
-            }
-
-        </table>
+        }
+    </table>
+    @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+    {
+        <div class="controls controls-row search-row">
+            <input id="searchStr" name="searchStr" class="input-block-level" type="text"
+                   placeholder="Search">
+            <button id="searchStr" name="searchStr" class="btn btn-success" type="submit">
+                <i class="icon-search">Search</i>
+            </button>
+        </div>
+    }
+    <div class="row">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
+        @Html.PagedListPager(Model, page => Url.Action("Index", new {page, searchStr=ViewBag.Search }))
     </div>
-</body>
-
-</html>
+</div>

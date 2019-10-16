@@ -1,11 +1,10 @@
 ﻿using DH_Blog.Models;
+using PagedList;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 
 namespace DH_Blog.Controllers
@@ -43,10 +42,12 @@ namespace DH_Blog.Controllers
 
 
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
+            int pageSize = 3; // display three blog posts at a time on this page
+            int pageNumber = (page ?? 1);
             var publishedBlogPosts = db.BlogPosts.Where(b => b.Published).ToList();
-            return View(publishedBlogPosts);
+            return View(db.BlogPosts.OrderByDescending(b => b.Created).ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult About()

@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using DH_Blog.Helpers;
 using DH_Blog.Models;
+using PagedList;
+
 
 namespace DH_Blog.Controllers
 {
@@ -17,18 +19,52 @@ namespace DH_Blog.Controllers
 
         // GET: BlogPosts
         [Authorize(Roles = "Admin, Moderator")]
-        public ActionResult Index()
+        public ActionResult Index(int? page, string searchStr)
         {
-            var myblogposts = db.BlogPosts.ToList();
-            return View(myblogposts);
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearch(searchStr);
+            int pageSize = 5; // the number of posts you want to display per page
+            int pageNumber = (page ?? 1);
+            return View(blogList.ToPagedList(pageNumber, pageSize));
+
+            //int pageSize = 5; // display three blog posts at a time on this page
+            //int pageNumber = (page ?? 1);
+            //var myblogposts = db.BlogPosts;
+            //return View(db.BlogPosts.OrderByDescending(b => b.Created).ToPagedList(pageNumber,pageSize));
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult UnPubIndex()
+        public ActionResult UnPubIndex(int? page,string searchStr)
         {
+            var blogList = IndexSearch(searchStr);
+            int pageSize = 5; // the number of posts you want to display per page
+            int pageNumber = (page ?? 1);
+
             var pubPosts = db.BlogPosts.Where(b => !b.Published).ToList();
-            return View("Index", pubPosts);
+            return View("Index", pubPosts.ToPagedList(pageNumber, pageSize));
         }
+
+        public IQueryable<BlogPost> IndexSearch(string searchStr)
+        {
+            IQueryable<BlogPost> result = null;
+            if (searchStr != null)
+            {
+                result = db.BlogPosts.AsQueryable();
+                result = result.Where(p => p.Title.Contains(searchStr) ||
+                p.BlogPostBody.Contains(searchStr) ||
+                p.Comments.Any(c => c.CommentBody.Contains(searchStr) ||
+                c.Author.FirstName.Contains(searchStr) ||
+                c.Author.LastName.Contains(searchStr) ||
+                c.Author.DisplayName.Contains(searchStr) ||
+                c.Author.Email.Contains(searchStr)));
+            }
+            else
+            {
+                result = db.BlogPosts.AsQueryable();
+            }
+            return result.OrderByDescending(p => p.Created);
+        }
+
 
         // GET: BlogPosts/Details/5
         public ActionResult Details(string Slug)

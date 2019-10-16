@@ -1,4 +1,6 @@
-﻿@model DH_Blog.Models.BlogPost
+﻿@using Microsoft.AspNet.Identity;
+@model DH_Blog.Models.BlogPost
+
 
 <!-- Post Content -->
 <article>
@@ -37,16 +39,19 @@
     @Html.AntiForgeryToken();
     @Html.ValidationSummary(true, "", new { @class = "text-danger" });
     <div class="container" mt-3>
-        @if (User.IsInRole("Admin, Moderator"))
-        {
-            @*@Html.ActionLink("Edit", "Comments", new { slug = Model.Slug })*@
-        }
         <div class="media">
             <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:50px;height:50px" />
             <div class="media-body" style="border:1px solid cadetblue; padding:10px 20px 10px 20px">
                 <div class="row" style="max-height:15px">
-                    <div class="col-md-9">
+                    <div class="col-md-8">
                         <span style="font-size:16px">by @comment.Author.Email</span>
+                    </div>
+                    <div class="col-md-1 d-flex justify-content-end">
+                        @if (User.IsInRole("Admin") || User.IsInRole("Moderator")
+                            || User.Identity.GetUserId() == comment.AuthorId)
+                        {
+                            @Html.ActionLink("Edit", "Edit", "comments", new { id = comment.Id }, null)
+                        }
                     </div>
                     <div class="col-md-3 d-flex justify-content-end" style="font-size:14px">
                         @comment.Created.ToString("MMM dd, y | hh:mm:ss tt")
@@ -54,6 +59,24 @@
                 </div>
                 <hr />
                 @Html.Raw(comment.CommentBody)
+                @if (comment.UpdateReason != null)
+                {
+                    <hr />
+                    if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                    {
+                        <div class="col" style="background-color:khaki; font-size:16px">
+                            Comment Moderated:
+                            <i> @comment.UpdateReason</i>
+                        </div>
+                    }
+                    else if (User.Identity.GetUserId() == comment.AuthorId)
+                    {
+                        <div class="col" style=" font-size:16px">
+                            Comment Edited:
+                            <i> @comment.UpdateReason</i>
+                        </div>
+                    }
+                }
             </div>
         </div>
     </div>

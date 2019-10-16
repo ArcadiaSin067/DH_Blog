@@ -1,5 +1,10 @@
 ﻿@using DH_Blog.Models
-@model IEnumerable<BlogPost>
+@using PagedList;
+@using PagedList.Mvc;
+
+@model IPagedList<BlogPost>
+
+<link href="~/Content/PagedList.css" rel="stylesheet" />
 
 <!-- Main Content -->
 <div class="container">
@@ -7,38 +12,50 @@
         <div class="col-lg-8 col-md-10 mx-auto">
             @foreach (var blogPost in Model.OrderByDescending(b => b.Created))
             {
-            <div class="post-preview">
-                <div class="row">
-                    @if (blogPost.ImagePath != null)
-                    {
-                        <div class="col-2">
-                            <img style="width:115px; height:115px" src="@blogPost.ImagePath " alt="" />
+                <div class="post-preview">
+                    <div class="row">
+                        @if (blogPost.ImagePath != null)
+                        {
+                            <div class="col-3 d-flex justify-content-end">
+                                <img style="width:115px; height:115px" src="@blogPost.ImagePath " alt="" />
+                            </div>
+                        }
+                        <div class="col-9">
+                            <a href=@Url.Action("Details","BlogPosts",new {slug = blogPost.Slug})>
+                                <h2 class="post-title">
+                                    @blogPost.Title
+                                </h2>
+                                <h4 class="post-subtitle">
+                                    @blogPost.Abstract
+                                </h4>
+                            </a>
                         </div>
-                    }
-                    <div class="col">
-                        <a href=@Url.Action("Details","BlogPosts",new {slug = blogPost.Slug})>
-                            <h2 class="post-title">
-                                @blogPost.Title
-                            </h2>
-                            <h3 class="post-subtitle">
-                                @blogPost.Abstract
-                            </h3>
-                        </a>
                     </div>
+                    <p class="post-meta" style="padding-left:30px">
+                        Posted by
+                        @Html.ActionLink("Daniel Hebbard", "About", "Home")
+                        on @blogPost.Created.ToString("MMM dd, yyyy")
+                    </p>
                 </div>
-                <p class="post-meta">
-                    Posted by
-                    @*<a href="">Daniel Hebbard</a>     //used for complex links with lots of embedded code or to external sites*@
-                    @Html.ActionLink("Daniel Hebbard", "About", "Home")    @*Otherwise use this for local pages*@
-                    on @blogPost.Created.ToString("MMM dd, yyyy")
-                </p>
-            </div>
                 <hr>
             }
-
-            <!-- Pager -->
-            <div class="clearfix">
+            @*<div class="clearfix">
                 <a class="btn float-right allButtons" href="#">Older Posts &rarr;</a>
+            </div>*@
+            @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+            {
+                <div class="controls controls-row search-row">
+                    <input id="searchStr" name="searchStr" class="input-block-level" type="text"
+                           placeholder="Search">
+                    <button id="searchStr" name="searchStr" class="btn btn-success" type="submit">
+                        <i class="icon-search">Search</i>
+                    </button>
+                </div>
+            }
+            <div class="row">
+                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
+                @Html.PagedListPager(Model, page => Url.Action("Index", new {page, searchStr=ViewBag.Search }))
             </div>
         </div>
     </div>
@@ -46,6 +63,6 @@
 
 
 @section scripts
-    {
+{
 
 }
