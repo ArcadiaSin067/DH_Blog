@@ -24,7 +24,7 @@ namespace DH_Blog.Controllers
                                 ConfigurationManager.AppSettings["emailto"])
                     {
                     Subject = model.Subject,
-                    Body = model.Body,
+                    Body = $"Incoming Email from your Blog <hr /> { model.Body }",
                     IsBodyHtml = true
                     };
                     var svc = new PersonalEmail();
