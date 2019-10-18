@@ -7,7 +7,7 @@
 <link href="~/Content/PagedList.css" rel="stylesheet" />
 
 <div class="container">
-    <h2>Index</h2>
+    <h2>UnPubIndex</h2>
     <h4>Blog Posts</h4>
     <hr />
     @if (User.IsInRole("Admin"))
@@ -103,7 +103,7 @@
             Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
         </div>
         <div class="col d-flex justify-content-end">
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
+            @Html.PagedListPager(Model, page => Url.Action("UnPubIndex", new { page, searchStr = ViewBag.Search }))
         </div>
     </div>
 </div>

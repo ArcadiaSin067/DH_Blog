@@ -14,6 +14,7 @@ using DH_Blog.Helpers;
 namespace DH_Blog.Controllers
 {
     [Authorize]
+    [RequireHttps]
     public class AccountController : Controller
     {
         private ApplicationSignInManager _signInManager;

@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.Google;
+using Owin.Security.Providers.LinkedIn;
 using Owin;
 using DH_Blog.Models;
 
@@ -46,6 +47,7 @@ namespace DH_Blog
             app.UseTwoFactorRememberBrowserCookie(DefaultAuthenticationTypes.TwoFactorRememberBrowserCookie);
 
             // Uncomment the following lines to enable logging in with third party login providers
+
             //app.UseMicrosoftAccountAuthentication(
             //    clientId: "",
             //    clientSecret: "");
@@ -57,12 +59,13 @@ namespace DH_Blog
             //app.UseFacebookAuthentication(
             //   appId: "",
             //   appSecret: "");
+            app.UseLinkedInAuthentication("78b4onyfjmtys8", "2aZi7r3fcc7nYQ1H");
 
-            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            //{
-            //    ClientId = "",
-            //    ClientSecret = ""
-            //});
+            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            {
+                ClientId = "773306731544-jo30r4ahu48rpjmsdofhd6845ot8nq42.apps.googleusercontent.com",
+                ClientSecret = "8yJJkRLePrCZiP6v94172xZy"
+            });
         }
     }
 }

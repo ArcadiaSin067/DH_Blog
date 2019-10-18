@@ -10,7 +10,8 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace DH_Blog.Controllers
-{
+{   
+    [RequireHttps]
     public class HomeController : Controller
     {
         public ActionResult Contact()
@@ -29,7 +30,8 @@ namespace DH_Blog.Controllers
                 try
                 {
                     await EmailHelper.ComposeEmailAsync(model);
-                    return View("Index", "Home");
+                    TempData["sent"] = "Success";
+                    return RedirectToAction("Contact");
                 }
                 catch (Exception ex)
                 {
@@ -42,13 +44,15 @@ namespace DH_Blog.Controllers
 
 
         private ApplicationDbContext db = new ApplicationDbContext();
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, string searchStr)
         {
-            int pageSize = 3; // display three blog posts at a time on this page
+            ViewBag.Search = searchStr;
+            var blogList = IndexSearchClass.IndexSearch(searchStr);
+            int pageSize = 3; // the number of posts you want to display per page
             int pageNumber = (page ?? 1);
-            var publishedBlogPosts = db.BlogPosts.Where(b => b.Published).ToList();
-            return View(db.BlogPosts.OrderByDescending(b => b.Created).ToPagedList(pageNumber, pageSize));
+            return View(blogList.ToPagedList(pageNumber, pageSize));
         }
+
 
         public ActionResult About()
         {

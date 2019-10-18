@@ -11,18 +11,18 @@
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
             <div class="col d-flex justify-content-end">
-                Search the Blogs for key words.
+                <p>Search the Blogs for key words.</p>
             </div>
             <div class="col d-flex justify-content-end">
-                @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                @using (Html.BeginForm("Index", "Home", FormMethod.Get, htmlAttributes: new { @class = "form" }))
                 {
 
                     <div class="controls controls-row search-row">
                         <input id="searchStr" name="searchStr" class="input-block-level" type="text"
-                               placeholder="Search">
-                        <button id="searchStr" name="searchStr" class="btn btn-success" type="submit">
-                            <i class="icon-search">Search</i>
-                        </button>
+                               placeholder="Search" style="padding:5px">
+                <button id="searchstr" name="searchstr" class="btn allButtons" type="submit">
+                    <i>Search</i>
+                </button>
                     </div>
                 }
             </div>

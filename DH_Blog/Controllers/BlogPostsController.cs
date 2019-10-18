@@ -13,56 +13,30 @@ using PagedList;
 
 namespace DH_Blog.Controllers
 {
+    [RequireHttps]
     public class BlogPostsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: BlogPosts
-        [Authorize(Roles = "Admin, Moderator")]
+        [Authorize(Roles = "Admin")]
         public ActionResult Index(int? page, string searchStr)
         {
             ViewBag.Search = searchStr;
-            var blogList = IndexSearch(searchStr);
+            var blogList = IndexSearchClass.IndexSearch(searchStr);
             int pageSize = 5; // the number of posts you want to display per page
             int pageNumber = (page ?? 1);
             return View(blogList.ToPagedList(pageNumber, pageSize));
-
-            //int pageSize = 5; // display three blog posts at a time on this page
-            //int pageNumber = (page ?? 1);
-            //var myblogposts = db.BlogPosts;
-            //return View(db.BlogPosts.OrderByDescending(b => b.Created).ToPagedList(pageNumber,pageSize));
         }
 
         [Authorize(Roles = "Admin")]
-        public ActionResult UnPubIndex(int? page,string searchStr)
+        public ActionResult UnPubIndex(int? page)
         {
-            var blogList = IndexSearch(searchStr);
             int pageSize = 5; // the number of posts you want to display per page
             int pageNumber = (page ?? 1);
 
-            var pubPosts = db.BlogPosts.Where(b => !b.Published).ToList();
-            return View("Index", pubPosts.ToPagedList(pageNumber, pageSize));
-        }
-
-        public IQueryable<BlogPost> IndexSearch(string searchStr)
-        {
-            IQueryable<BlogPost> result = null;
-            if (searchStr != null)
-            {
-                result = db.BlogPosts.AsQueryable();
-                result = result.Where(p => p.Title.Contains(searchStr) ||
-                p.BlogPostBody.Contains(searchStr) ||
-                p.Comments.Any(c => c.CommentBody.Contains(searchStr) ||
-                c.Author.FirstName.Contains(searchStr) ||
-                c.Author.LastName.Contains(searchStr) ||
-                c.Author.DisplayName.Contains(searchStr) ||
-                c.Author.Email.Contains(searchStr)));
-            }
-            else
-            {
-                result = db.BlogPosts.AsQueryable();
-            }
-            return result.OrderByDescending(p => p.Created);
+            var unpubPosts = db.BlogPosts.Where(b => !b.Published).OrderByDescending(c => c.Created);
+            return View("Index", unpubPosts.ToPagedList(pageNumber, pageSize));
         }
 
 
@@ -91,6 +65,7 @@ namespace DH_Blog.Controllers
         // POST: BlogPosts/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,Title,Abstract,BlogPostBody,Published")] BlogPost blogPost, HttpPostedFileBase Image)
@@ -144,6 +119,7 @@ namespace DH_Blog.Controllers
         // POST: BlogPosts/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id, Title, Abstract, BlogPostBody,Published,Created,Slug, ImagePath")] BlogPost blogPost, HttpPostedFileBase Image)
@@ -197,6 +173,7 @@ namespace DH_Blog.Controllers
         }
 
         // POST: BlogPosts/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

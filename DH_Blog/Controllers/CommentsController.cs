@@ -11,11 +11,13 @@ using Microsoft.AspNet.Identity;
 
 namespace DH_Blog.Controllers
 {
+    [RequireHttps]
     public class CommentsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Comments
+        [Authorize]
         public ActionResult Index()
         {
             var comments = db.Comments.Include(c => c.Author).Include(c => c.BlogPost);
@@ -23,6 +25,7 @@ namespace DH_Blog.Controllers
         }
 
         // GET: Comments/Details/5
+        [Authorize]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -59,6 +62,7 @@ namespace DH_Blog.Controllers
         }
 
         // GET: Comments/Edit/5
+        [Authorize]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -96,6 +100,7 @@ namespace DH_Blog.Controllers
         }
 
         // GET: Comments/Delete/5
+        [Authorize]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -111,6 +116,7 @@ namespace DH_Blog.Controllers
         }
 
         // POST: Comments/Delete/5
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

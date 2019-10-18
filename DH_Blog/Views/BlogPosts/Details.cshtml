@@ -12,11 +12,10 @@
         </div>
     </div>
 </article>
-<hr style="border:2px solid black;" />
 
 @if (User.Identity.IsAuthenticated)
 {
-
+<hr />
     <div id="addComment">
         <div class="col"><h4>Leave a Comment?</h4></div>
         @using (Html.BeginForm("Create", "Comments", FormMethod.Post))
@@ -32,8 +31,9 @@
         }
     </div>
 }
-<hr style="border:2px solid black;" />
 
+<hr />
+<p><h4 style="padding-left:50px">Comments Section</h4></p>
 @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
 {
     @Html.AntiForgeryToken();
@@ -71,7 +71,7 @@
                     <hr />
                     // this section isn't working as intended and i will need to ask the boss man how to get it to do so
                     // my suspicion is that i need to set this on the edit page to carry over to the post to be static
-                    if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && User.Identity.GetUserId() == comment.AuthorId )
+                    if ((User.IsInRole("Admin") || User.IsInRole("Moderator")))
                     {
                         <div class="col" style="background-color:khaki; font-size:16px">
                             Comment Moderated:
