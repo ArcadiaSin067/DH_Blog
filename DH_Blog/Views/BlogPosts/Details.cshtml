@@ -43,18 +43,25 @@
             <img src="~/IMGs/blank-user.png" class="align-self-start mr-3" style="width:50px;height:50px" />
             <div class="media-body" style="border:1px solid cadetblue; padding:10px 20px 10px 20px">
                 <div class="row" style="max-height:15px">
-                    <div class="col-md-8">
+                    <div class="col-md-7">
                         <span style="font-size:16px">by @comment.Author.Email</span>
                     </div>
-                    <div class="col-md-1 d-flex justify-content-end">
+                    <div class="col-md-2 d-flex justify-content-end" style="font-size:14px">
                         @if (User.IsInRole("Admin") || User.IsInRole("Moderator")
                             || User.Identity.GetUserId() == comment.AuthorId)
                         {
-                            @Html.ActionLink("Edit", "Edit", "comments", new { id = comment.Id }, null)
+                            // these two buttons direct you to their Views and after they send you to the Index of comments
+                            // i would rather they open in a modal and not redirect while a jQuery(?) updates the page
+                            <div class="col d-flex justify-content-end">
+                                @Html.ActionLink("Edit", "Edit", "comments", new { id = comment.Id }, null)
+                            </div>
+                            <div class="col d-flex justify-content-end">
+                                @Html.ActionLink("Delete", "Delete", "comments", new { id = comment.Id }, null)
+                            </div>
                         }
                     </div>
                     <div class="col-md-3 d-flex justify-content-end" style="font-size:14px">
-                        @comment.Created.ToString("MMM dd, y | hh:mm:ss tt")
+                        @comment.Created.ToString("MM/dd/y | hh:mm:ss tt")
                     </div>
                 </div>
                 <hr />
@@ -62,7 +69,9 @@
                 @if (comment.UpdateReason != null)
                 {
                     <hr />
-                    if (User.IsInRole("Admin") || User.IsInRole("Moderator"))
+                    // this section isn't working as intended and i will need to ask the boss man how to get it to do so
+                    // my suspicion is that i need to set this on the edit page to carry over to the post to be static
+                    if ((User.IsInRole("Admin") || User.IsInRole("Moderator")) && User.Identity.GetUserId() == comment.AuthorId )
                     {
                         <div class="col" style="background-color:khaki; font-size:16px">
                             Comment Moderated:
