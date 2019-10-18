@@ -1,7 +1,9 @@
-﻿using DH_Blog.Models;
+﻿using DH_Blog.Helpers;
+using DH_Blog.Models;
 using PagedList;
 using System;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -11,6 +13,13 @@ namespace DH_Blog.Controllers
 {
     public class HomeController : Controller
     {
+        public ActionResult Contact()
+        {
+            EmailModel model = new EmailModel();
+            return View(model);
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Contact(EmailModel model)
@@ -19,21 +28,12 @@ namespace DH_Blog.Controllers
             {
                 try
                 {
-                    var emailFrom = $"{model.FromEmail}<{ConfigurationManager.AppSettings["emailto"]}>";
-                    var email = new MailMessage(emailFrom,
-                                ConfigurationManager.AppSettings["emailto"])
-                    {
-                    Subject = model.Subject,
-                    Body = $"Incoming Email from your Blog <hr /> { model.Body }",
-                    IsBodyHtml = true
-                    };
-                    var svc = new PersonalEmail();
-                    await svc.SendAsync(email);
-                    return View(new EmailModel());
+                    await EmailHelper.ComposeEmailAsync(model);
+                    return View("Index", "Home");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message);
                     await Task.FromResult(0);
                 }
             }
@@ -57,10 +57,5 @@ namespace DH_Blog.Controllers
             return View();
         }
 
-        public ActionResult Contact()
-        {
-            EmailModel model = new EmailModel();
-            return View(model);
-        }
     }
 }

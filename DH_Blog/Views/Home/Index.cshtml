@@ -10,6 +10,23 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="col d-flex justify-content-end">
+                Search the Blogs for key words.
+            </div>
+            <div class="col d-flex justify-content-end">
+                @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
+                {
+
+                    <div class="controls controls-row search-row">
+                        <input id="searchStr" name="searchStr" class="input-block-level" type="text"
+                               placeholder="Search">
+                        <button id="searchStr" name="searchStr" class="btn btn-success" type="submit">
+                            <i class="icon-search">Search</i>
+                        </button>
+                    </div>
+                }
+            </div>
+            <hr />
             @foreach (var blogPost in Model.OrderByDescending(b => b.Created))
             {
                 <div class="post-preview">
@@ -39,23 +56,13 @@
                 </div>
                 <hr>
             }
-            @*<div class="clearfix">
-                <a class="btn float-right allButtons" href="#">Older Posts &rarr;</a>
-            </div>*@
-            @using (Html.BeginForm("Index", "BlogPosts", FormMethod.Get, htmlAttributes: new { @class = "form" }))
-            {
-                <div class="controls controls-row search-row">
-                    <input id="searchStr" name="searchStr" class="input-block-level" type="text"
-                           placeholder="Search">
-                    <button id="searchStr" name="searchStr" class="btn btn-success" type="submit">
-                        <i class="icon-search">Search</i>
-                    </button>
+            <div class="col">
+                <div class="col d-flex justify-content-end">
+                    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
                 </div>
-            }
-            <div class="row">
-                Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-                @*@Html.PagedListPager(Model, page => Url.Action("Index", new { page }))*@
-                @Html.PagedListPager(Model, page => Url.Action("Index", new {page, searchStr=ViewBag.Search }))
+                <div class="col d-flex justify-content-end">
+                    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchStr = ViewBag.Search }))
+                </div>
             </div>
         </div>
     </div>
