@@ -78,11 +78,14 @@
                             <i> @comment.UpdateReason</i>
                         </div>
                     }
-                    else if (User.Identity.GetUserId() == comment.AuthorId)
+
+                }
+                else
+                {
+                    if (User.Identity.GetUserId() == comment.AuthorId && comment.Updated != null)
                     {
                         <div class="col" style=" font-size:16px">
-                            Comment Edited:
-                            <i> @comment.UpdateReason</i>
+                            Comment Edited
                         </div>
                     }
                 }
