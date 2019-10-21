@@ -86,6 +86,7 @@ namespace DH_Blog.Controllers
                 if (ImageUploadValidator.IsWebFriendlyImage(Image))
                 {
                     var fileName = Path.GetFileName(Image.FileName);
+                    fileName = Path.GetFileNameWithoutExtension(fileName) + "_" + DateTime.Now.Ticks + Path.GetExtension(fileName);
                     Image.SaveAs(Path.Combine(Server.MapPath("~/Uploads/"), fileName));
                     blogPost.ImagePath = "/Uploads/" + fileName;
                 }

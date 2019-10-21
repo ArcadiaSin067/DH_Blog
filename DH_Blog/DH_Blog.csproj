@@ -552,9 +552,12 @@
     <Content Include="Scripts\tinymce\themes\silver\theme.min.js" />
     <Content Include="Scripts\tinymce\tinymce.js" />
     <Content Include="Scripts\tinymce\tinymce.min.js" />
+    <Content Include="Uploads\blog.jpeg" />
+    <Content Include="Uploads\blog.jpg" />
     <Content Include="Uploads\blog1.jpeg" />
     <Content Include="Uploads\blog2.jpeg" />
     <Content Include="Uploads\blog3.jpeg" />
+    <Content Include="Uploads\unpub.jpeg" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
