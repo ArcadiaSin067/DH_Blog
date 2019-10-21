@@ -10,8 +10,8 @@
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-            <div class="col d-flex justify-content-end">
-                <p>Search the Blogs for key words.</p>
+            <div class="col d-flex justify-content-end" style="padding-bottom: 15px">
+                Search the Blogs for key words.
             </div>
             <div class="col d-flex justify-content-end">
                 @using (Html.BeginForm("Index", "Home", FormMethod.Get, htmlAttributes: new { @class = "form" }))
@@ -48,7 +48,7 @@
                             </a>
                         </div>
                     </div>
-                    <p class="post-meta" style="padding-left:30px">
+                    <p class="post-meta" style="margin-left:50px">
                         Posted by
                         @Html.ActionLink("Daniel Hebbard", "About", "Home")
                         on @blogPost.Created.ToString("MMM dd, yyyy")
