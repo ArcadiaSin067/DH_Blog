@@ -351,4 +351,4 @@ MigrationBackup/
 *.config
 DH_Blog/Migrations/Configuration.cs
 
-/DH_Blog/App_Start/Startup.Auth.cs
+DH_Blog/App_Start/Startup.Auth.cs
