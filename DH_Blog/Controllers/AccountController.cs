@@ -218,6 +218,7 @@ namespace DH_Blog.Controllers
             }
             return RedirectToAction("ConfirmationSent");
         }
+
         public ActionResult ConfimationSent()
         {
             return View();
