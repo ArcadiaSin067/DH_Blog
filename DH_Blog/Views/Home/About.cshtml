@@ -1,33 +1,74 @@
 ﻿
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
+    <style>
+        #about {
+            width: 100%;
+            height: auto;
+            background: #fff;
+            padding-top: 90px;
+            padding-bottom:45px;
+        }
+        #about .div-img-bg {
+            padding-bottom: 30px;
+            border: 20px solid #b8a07e;
+        }
+        #about .div-img-bg .about-img img {
+            width: 100%;
+            box-shadow: 0px 0px 85px 0px rgba(0, 0, 0, 0.14);
+            margin-top: -60px;
+            margin-left: 40px;
+            height: 400px;
+            object-fit: cover;
+        }
+        #about .about-descr .p-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            text-align: left;
+        }
+        #about .about-descr .separator {
+            max-width: 80%;
+            margin-bottom: 0;
+            text-align: left;
+        }
+    </style>
+</head>
 <body>
+    <!-- start section about us -->
+    <div class="container" id="about">
+        <div class="row justify-content-between">
 
-    <!-- Main Content -->
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe nostrum ullam eveniet pariatur voluptates odit, fuga atque ea nobis sit soluta odio, adipisci quas excepturi maxime quae totam ducimus consectetur?</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eius praesentium recusandae illo eaque architecto error, repellendus iusto reprehenderit, doloribus, minus sunt. Numquam at quae voluptatum in officia voluptas voluptatibus, minus!</p>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut consequuntur magnam, excepturi aliquid ex itaque esse est vero natus quae optio aperiam soluta voluptatibus corporis atque iste neque sit tempora!</p>
+            <div class="col-lg-4 ">
+                <div class="div-img-bg">
+                    <div class="about-img">
+                        <img src="~/IMGs/me.jpg" class="img-responsive" alt="me" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="about-descr">
+
+                    <p class="p-heading">I'm a North Carolina based web developer who loves clean, simple & unique design. I also enjoy digital artistry, ui/ux creation, & logo design. </p>
+                    <p class="separator">Raised with computers, I found a passion for all things digital at an early age. Over the years I've delved into all the different aspects of coding, digital art, & web production.</p>
+
+                </div>
             </div>
         </div>
     </div>
-    <hr>
 
-    @section scripts
-    {
-    @*script to change the masthead stuff*@
-    <script>
-        $(document).ready(function () {
-            // Set background image of a div on load
-            var imageUrl = "/IMGs/about-bg.jpg";
-            $(".masthead").css("background-image", "url(" + imageUrl + ")");
-            $('#topText').text("About");
-            $('#subText').text("Let's talk about me");
-        });
-    </script>
+    @section scripts{
+        @*script to change the masthead stuff*@
+        <script>
+            $(document).ready(function () {
+                // Set background image of a div on load
+                var imageUrl = "/IMGs/about-bg.jpg";
+                $(".masthead").css("background-image", "url(" + imageUrl + ")");
+                $('#topText').text("About");
+                $('#subText').text("Let's talk about me");
+            });
+        </script>
     }
 
 </body>

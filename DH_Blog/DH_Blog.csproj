@@ -415,6 +415,7 @@
     <Content Include="IMGs\contact-bg.jpg" />
     <Content Include="IMGs\favicon.png" />
     <Content Include="IMGs\home-bg.jpg" />
+    <Content Include="IMGs\me.jpg" />
     <Content Include="IMGs\post-bg.jpg" />
     <Content Include="IMGs\post-sample-image.jpg" />
     <Content Include="Scripts\bootstrap.bundle.js" />
